@@ -8,7 +8,7 @@ from collections import Counter
 from wordcloud import WordCloud, STOPWORDS
 import networkx as nx
 
-# 폰트 경로 (main.py에서 동기화됨)
+# 폰트 경로
 HAN_FONT_PATH = './font/AppleSDGothicNeoB.ttf'
 
 
@@ -17,15 +17,14 @@ def render_dashboard():
     analysis_data = st.session_state.get('analysis_data', {})
     
     if not analysis_data:
-        st.warning("분석 데이터가 로드되지 않았습니다. 사이드바에서 '5대 팬덤 요인 분석 실행'을 클릭해주세요.")
+        st.warning("분석 데이터가 로드되지 않았습니다. ")
         return
 
     factor_list = list(analysis_data.keys())
     min_count_network = st.session_state.get('min_count_network', 5) 
 
     # Plotly (Bar Chart) 
-    st.header("1. 요인별 정보량 집중도 비교 (Plotly)")
-    st.markdown("수집된 기사 수를 통해 각 요인에 대한 **온라인 관심의 상대적 크기**를 파악합니다.")
+    st.header("요인별 정보량 집중도 비교 (Plotly)")
     
     factor_counts = {k: len(v['df']) for k, v in analysis_data.items()}
     df_factor_counts = pd.DataFrame(factor_counts.items(), columns=['팬덤 요인', '뉴스 기사 수'])
@@ -41,13 +40,12 @@ def render_dashboard():
     st.plotly_chart(fig_plotly, use_container_width=True)
 
 
-    # 3.2. 핵심 키워드 비교: Matplotlib/WordCloud & NetworkX
-    st.header("2. 핵심 키워드 및 연관성 분석 (WordCloud & NetworkX)")
-    st.markdown("각 요인별로 가장 중요하게 언급되는 키워드(WordCloud)와 이들의 관계(NetworkX)를 분석합니다.")
-    
+    # 핵심 키워드 비교
+    st.header("핵심 키워드 및 연관성 분석")
+   
     
     # wordcloud
-    st.subheader("2.1. 요인별 핵심 키워드 (WordCloud)")
+    st.subheader("인별 핵심 키워드")
     
     wc_cols = st.columns(len(factor_list))
     for i, factor in enumerate(factor_list):
@@ -56,7 +54,7 @@ def render_dashboard():
             data = analysis_data[factor]['word_counts']
             
             if data:
-                # WordCloud 객체 생성 (폰트 경로 지정)
+                # WordCloud 객체 생성
                 wc = WordCloud(
                     font_path=HAN_FONT_PATH, 
                     max_words=50, 
@@ -74,12 +72,12 @@ def render_dashboard():
                 st.info("키워드 부족")
 
     # 3.3. 키워드 관계 분석: NetworkX
-    st.subheader("2.2. '외국인' 요인 키워드 관계망 (NetworkX)")
+    st.subheader("'외국인' 요인 키워드 관계망")
     
     G_foreign = analysis_data['외국인']['graph']
     
     if G_foreign.number_of_nodes() > 0:
-        # NetworkX 시각화 (폰트 경로 지정)
+        # NetworkX 시각화
         pos_spring = nx.spring_layout(G_foreign, k=0.4, iterations=50, seed=42)
         node_sizes = [G_foreign.degree(node) * 300 for node in G_foreign.nodes()]
         edge_widths = [G_foreign[u][v]['weight'] * 0.2 for u, v in G_foreign.edges()]
@@ -94,8 +92,6 @@ def render_dashboard():
             node_color='lightcoral', 
             edge_color='gray', 
             alpha=0.7,
-            # Matplotlib의 폰트 설정을 따르므로 font_family에 폰트 이름 대신 경로를 사용하는 경우도 있으나,
-            # 여기서는 Matplotlib 설정된 이름을 따름 (AppleSDGothicNeoB가 Matplotlib에 등록된 것으로 가정)
             font_family=plt.rcParams['font.family'], 
             ax=ax_net
         )
@@ -103,11 +99,11 @@ def render_dashboard():
         ax_net.axis('off')
         st.pyplot(fig_net)
     else:
-        st.warning(f"외국인 요인에 대한 네트워크 생성이 어렵습니다. 최소 빈도({min_count_network})를 낮춰보세요.")
+        st.warning(f"외국인 요인에 대한 네트워크 생성이 어렵습니다.")
 
 
-    # 3.4. 키워드 관계 분석: Altair (Scatter Plot) - 요구사항 2 충족
-    st.header("3. 키워드 중요도 및 빈도 분석 (Altair)")
+    # 키워드 관계 분석
+    st.header("키워드 중요도 및 빈도 분석")
     
     all_keywords = Counter()
     for factor in factor_list:
@@ -117,7 +113,6 @@ def render_dashboard():
     df_keywords['Importance'] = df_keywords['Frequency'].rank(method='max') 
     
     if not df_keywords.empty:
-        # Altair는 웹 기반이므로 Matplotlib 폰트 경로 설정의 영향을 받지 않습니다.
         chart = alt.Chart(df_keywords).mark_circle().encode(
             x=alt.X('Frequency', title='빈도 (X축: 대중적 관심)'),
             y=alt.Y('Importance', title='중요도 (Y축: 분석적 중요도)'),
