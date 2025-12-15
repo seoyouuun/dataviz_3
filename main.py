@@ -69,7 +69,7 @@ st.sidebar.selectbox('소득층', ['최하위층', '하위층', '중하위층', 
 st.sidebar.selectbox('학력', ['초졸', '중졸', '고졸', '대졸', '박사 이상'])
 
 
-# 네이버 API 키 (제시된 정보)
+# 네이버 API 키
 CLIENT_ID = 'Hl5maeWyGFS0SOj9hJQt'
 CLIENT_SECRET = 'sYYE75Wqpv'
 
