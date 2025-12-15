@@ -180,8 +180,8 @@ if run_analysis:
     st.plotly_chart(fig_plotly, use_container_width=True)
     
     
-    # 2. WordCloud - 요인별 핵심 키워드
-    st.header("요인별 핵심 키워드 워드클라우드")
+    #  WordCloud 
+    st.header("워드클라우드")
     
     cols = st.columns(len(factor_data))
     for i, (factor, data) in enumerate(factor_data.items()):
@@ -207,10 +207,8 @@ if run_analysis:
             else:
                 st.info("키워드 데이터 부족")
     
-
-    
-    # 3. Seaborn - 상위 키워드 빈도 분석
-    st.header("전체 상위 키워드 빈도 분석")
+    # Seaborn 
+    st.header("핵심 키워드")
     
     all_keywords = Counter()
     for factor_info in factor_data.values():
@@ -228,7 +226,7 @@ if run_analysis:
     plt.close()
     
     
-    # 4. Altair - 키워드 분포 스캐터 플롯
+    # Altair 
     st.header("키워드 빈도 vs 중요도 분석")
     
     df_scatter = pd.DataFrame(all_keywords.most_common(50), columns=['키워드', '빈도'])
@@ -250,7 +248,7 @@ if run_analysis:
     st.altair_chart(chart, use_container_width=True)
     
     
-    # 5. NetworkX - 키워드 관계망
+    # NetworkX 
     st.header("키워드 관계 네트워크")
     
     if '외국인' in factor_data:
@@ -277,14 +275,14 @@ if run_analysis:
             )
             ax_net.set_title("외국인 요인 키워드 관계 네트워크", fontsize=18, fontweight='bold')
             ax_net.axis('off')
+('off')
+    
             st.pyplot(fig_net)
-            plt.close()
-        else:
-            st.warning("네트워크 생성에 충분한 데이터가 없습니다. 최소 빈도를 낮춰보세요.")
+            plt.close(fig_net)
+            
     else:
-        st.warning("외국인 요인 데이터가 없습니다.")
-    
-    
+            st.warning("네트워크 생성에 충분한 데이터가 없습니다.")
+   
     # 분석 결과 요약
     st.header("분석 결과 요약")
     st.markdown(f"""
