@@ -69,7 +69,7 @@ st.sidebar.selectbox('학력', ['초졸', '중졸', '고졸', '대졸', '박사 
 CLIENT_ID = 'Hl5maeWyGFS0SOj9hJQt'
 CLIENT_SECRET = 'sYYE75Wqpv'
 
-import data.viz
+import data_viz
 
 CLIENT_ID = 'Hl5maeWyGFS0SOj9hJQt'
 CLIENT_SECRET = 'sYYE75Wqpv'
