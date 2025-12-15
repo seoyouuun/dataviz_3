@@ -1,6 +1,3 @@
-# ==============================================================================
-# 0. 라이브러리 및 환경 설정
-# ==============================================================================
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -22,45 +19,10 @@ import networkx as nx
 CLIENT_ID = 'Hl5maeWyGFS0SOj9hJQt'
 CLIENT_SECRET = 'sYYE75Wqpv'
 
-# 한글 폰트 설정 (로컬 환경 및 Streamlit 환경 대응)
-try:
-    # 윈도우 환경 등
-    plt.rcParams['font.family'] = 'Malgun Gothic'
-    HAN_FONT_PATH = 'Malgun Gothic'
-except:
-    # 기타 환경 (Linux/Mac)
-    plt.rcParams['font.family'] = 'DejaVu Sans'
-    HAN_FONT_PATH = 'DejaVu Sans'
-plt.rcParams['axes.unicode_minus'] = False
+# 한글 폰트 설정 
+plt.rcParams['font.family'] = 'Malgun Gothic'
 
-
-# ==============================================================================
-# 1. Streamlit 페이지 설정 및 메트릭
-# ==============================================================================
-
-st.set_page_config(
-    page_title="팬덤 형성 요인 간접 분석 대시보드",
-    page_icon="🔍",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
-
-# 학번/이름 표기 (필수 요구사항)
-st.sidebar.title("제출자 정보 (시험 필수)")
-st.sidebar.markdown("### 학번: 20XX1234")
-st.sidebar.markdown("### 이름: 홍길동")
-st.sidebar.divider()
-
-st.title("🎤 K-POP 데몬 헌터스 팬덤 형성 요인 간접 분석")
-st.markdown("""
-    **💡 분석 개요:** 네이버 API는 사용자 속성(성별, 연령 등)을 제공하지 않으므로, 
-    팬덤의 **온라인 담론(키워드 언급량)**을 통해 5가지 요인별 관심도 및 특성을 간접적으로 분석합니다.
-""")
-
-
-# ==============================================================================
 # 2. 데이터 수집 함수 (네이버 API 연동)
-# ==============================================================================
 
 @st.cache_data(ttl=3600)
 def fetch_naver_data(query, num_data=100, client_id=CLIENT_ID, client_secret=CLIENT_SECRET):
