@@ -48,9 +48,4 @@ st.sidebar.selectbox('지역', ['서울', '경기', '인천', '대전', '대구'
 st.sidebar.selectbox('소득층', ['최하위층', '하위층', '중하위층', '중간층', '중상위층', '상위층', '최상위층'])
 st.sidebar.selectbox('학력', ['초졸', '중졸', '고졸', '대졸', '박사 이상'])
 
-import data
-import data_
-import data_2
-import viz
-import visualization
 
