@@ -15,7 +15,7 @@ from itertools import combinations
 from wordcloud import WordCloud
 import networkx as nx
 from konlpy.tag import Okt
-from ckonlpy.tag import Twitter
+from konlpy.tag import Okt
 
 # 한글 폰트 설정
 plt.rcParams['font.family'] = './font/AppleSDGothicNeoB.ttf'
