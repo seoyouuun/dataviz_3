@@ -1,3 +1,5 @@
 matplotlib
 plotly
 streamlit
+seaborn
+altair
