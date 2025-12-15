@@ -77,3 +77,6 @@ CLIENT_SECRET = 'sYYE75Wqpv'
 
 
 data_.fetch_naver_data("팬덤", client_id=CLIENT_ID, client_secret=CLIENT_SECRET)
+
+import data_
+
