@@ -1,5 +1,10 @@
 import streamlit as st
 import urllib.parse
+import json 
+import pandas as pd
+import urllib.request
+import re
+import time
 
 #데이터 수집
 @st.cache_data(ttl=3600)
