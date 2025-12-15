@@ -14,6 +14,7 @@ from datetime import datetime
 import urllib.request
 import json
 from itertools import combinations
+from konlpy.tag import Okt
 
 
 
