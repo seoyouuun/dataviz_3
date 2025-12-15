@@ -33,7 +33,7 @@ st.set_page_config(
   layout="wide", 
   initial_sidebar_state="expanded",
   menu_items={
-  '설명서': "https://docs.streamlit.io"
+  'About': "https://docs.streamlit.io"
    }
 )
 
