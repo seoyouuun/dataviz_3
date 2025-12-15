@@ -1,4 +1,13 @@
 import streamlit as st
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import plotly.express as px
+import altair as alt
+from collections import Counter
+from wordcloud import WordCloud, STOPWORDS
+import networkx as nx
+
 
 # 페이지 기본 설정
 st.set_page_config(
