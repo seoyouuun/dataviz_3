@@ -98,14 +98,10 @@ run_analysis = st.sidebar.button("분석 실행", type="primary")
 
 #분석 실행
 if run_analysis:
-    if not client_id or not client_secret:
-        st.error("네이버 API 키를 입력해주세요")
-    else:
-        with st.spinner("데이터 수집 및 분석 중"):
+    [cite_start]with st.spinner("데이터 수집 및 분석 중..."):
             # 불용어 설정
             custom_stopwords = set([s.strip() for s in stopwords_input.split(',')])
-            okt = Okt()
-            
+         
             # 5가지 요인별 데이터 수집
             factor_data = {}
             
@@ -113,11 +109,17 @@ if run_analysis:
                 query = f"{base_query} {add_keyword}" if add_keyword else base_query
                 
                 # 데이터 수집
-                df_factor = fetch_naver_data(query, num_data, client_id, client_secret)
+                [cite_start]df_factor = fetch_naver_data(query, num_data_per_factor)
                 
                 if df_factor.empty:
                     st.warning(f"{factor} 요인 데이터 수집 실패")
                     continue
+
+                factor_data[factor] = process_analysis_data(df_factor, min_count_network, min_word_len, custom_stopwords_set)
+
+            # Session State에 결과 저장
+            st.session_state['analysis_data'] = factor_data
+        st.success("분석 완료")
                 
                 # 텍스트 전처리
                 all_text = ' '.join(df_factor['title'].tolist() + df_factor['description'].tolist())
@@ -152,6 +154,8 @@ if run_analysis:
             
             st.session_state['factor_data'] = factor_data
             st.success("분석 완료")
+        if st.session_state.get('analysis_data'):
+            render_dashboard()
 
 # 시각화
     session_state and st.session_state['factor_data']
