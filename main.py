@@ -20,7 +20,7 @@ C321081 김서연의 페이지입니다.
 
 st.divider()
 
-# 마무리
+# 하단
 st.caption("Created by C321081 김서연")
 
 
@@ -37,7 +37,6 @@ st.set_page_config(
    }
 )
 
-#사이드바 설정
 st.sidebar.title('다양한 사이드바 위젯들')
 
 st.sidebar.checkbox('외국인')
@@ -49,3 +48,12 @@ st.sidebar.selectbox('소득층', ['최하위층', '하위층', '중하위층', 
 st.sidebar.selectbox('학력', ['초졸', '중졸', '고졸', '대졸', '박사 이상'])
 
 
+# 네이버 API 키 (제시된 정보)
+CLIENT_ID = 'Hl5maeWyGFS0SOj9hJQt'
+CLIENT_SECRET = 'sYYE75Wqpv'
+
+import data
+import data_
+import data_2
+import viz
+import visualizaion
