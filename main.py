@@ -16,6 +16,9 @@ import json
 from itertools import combinations
 from konlpy.tag import Okt
 
+import data_viz
+import data_
+import viz
 
 
 # 페이지 기본 설정
@@ -70,7 +73,7 @@ st.sidebar.selectbox('학력', ['초졸', '중졸', '고졸', '대졸', '박사 
 CLIENT_ID = 'Hl5maeWyGFS0SOj9hJQt'
 CLIENT_SECRET = 'sYYE75Wqpv'
 
-import data_viz
+
 
 CLIENT_ID = 'Hl5maeWyGFS0SOj9hJQt'
 CLIENT_SECRET = 'sYYE75Wqpv'
@@ -78,5 +81,3 @@ CLIENT_SECRET = 'sYYE75Wqpv'
 
 data_.fetch_naver_data("팬덤", client_id=CLIENT_ID, client_secret=CLIENT_SECRET)
 
-import data_
-import viz
