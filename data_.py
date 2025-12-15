@@ -1,3 +1,5 @@
+import streamlit as st
+
 #데이터 수집
 @st.cache_data(ttl=3600)
 def fetch_naver_data(query, num_data=100, client_id=CLIENT_ID, client_secret=CLIENT_SECRET):
