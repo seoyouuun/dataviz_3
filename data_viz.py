@@ -18,7 +18,7 @@ from konlpy.tag import Okt
 from konlpy.tag import Okt
 
 # 한글 폰트 설정
-plt.rcParams['font.family'] = './font/AppleSDGothicNeoB.ttf'
+plt.rcParams['font.family'] = 'fonts/AppleSDGothicNeoB.ttf'
 
 # 페이지 설정
 st.set_page_config(page_title="네이버 뉴스 분석 대시보드", layout="wide")
