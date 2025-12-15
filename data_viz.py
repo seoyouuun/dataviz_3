@@ -15,23 +15,22 @@ from itertools import combinations
 from wordcloud import WordCloud
 import networkx as nx
 from konlpy.tag import Okt
+from ckonlpy.tag import Twitter
 
 # 한글 폰트 설정
-plt.rcParams['font.family'] = 'Malgun Gothic'
-hangul_font_path = './font/AppleSDGothicNeoB.ttf'
+plt.rcParams['font.family'] = './font/AppleSDGothicNeoB.ttf'
 
 # 페이지 설정
 st.set_page_config(page_title="네이버 뉴스 분석 대시보드", layout="wide")
 
 # 제목
-st.title("📊 네이버 뉴스 API 기반 종합 시각화 분석")
+st.title("네이버 뉴스 기반 분석")
 
-# ==================== 데이터 수집 함수 ====================
+# 데이터 수집
 @st.cache_data(ttl=3600)
 def fetch_naver_data(query, num_data=100, client_id=None, client_secret=None):
-    """네이버 뉴스 API를 통해 데이터 수집"""
     if not client_id or not client_secret:
-        raise ValueError("Client ID와 Secret을 입력해주세요.")
+        raise ValueError("제대로 입력해주세요.")
     
     encText = urllib.parse.quote(query)
     results = []
@@ -67,8 +66,8 @@ def fetch_naver_data(query, num_data=100, client_id=None, client_secret=None):
         return df.head(num_data)
     return pd.DataFrame()
 
-# ==================== 사이드바 설정 ====================
-st.sidebar.header("⚙️ 분석 설정")
+# 사이드바 설정
+st.sidebar.header("분석 설정")
 
 # API 키 입력
 client_id = st.sidebar.text_input("네이버 Client ID", type="password")
@@ -81,11 +80,11 @@ num_data = st.sidebar.slider("수집할 뉴스 수", 20, 100, 50)
 
 # 5가지 요인별 추가 키워드
 factor_queries = {
-    '성별': st.sidebar.text_input("성별 키워드", "남성 팬 OR 여성 팬"),
-    '지역': st.sidebar.text_input("지역 키워드", "지역 OR 콘서트"),
-    '외국인': st.sidebar.text_input("외국인 키워드", "해외 OR 글로벌"),
+    '성별': st.sidebar.text_input("성별 키워드", "남성 OR 여성"),
+    '지역': st.sidebar.text_input("지역 키워드", "도시 OR 지방"),
+    '외국인': st.sidebar.text_input("외국인 키워드", "국내위주 OR 글로벌"),
     '연령': st.sidebar.text_input("연령 키워드", "MZ세대 OR 10대"),
-    '학력': st.sidebar.text_input("학력 키워드", "세계관 OR 철학적")
+    '학력': st.sidebar.text_input("학력 키워드", "저학력 OR 고학력")
 }
 
 # 분석 파라미터
@@ -95,14 +94,14 @@ min_count_network = st.sidebar.slider("네트워크 최소 빈도", 2, 10, 3)
 stopwords_input = st.sidebar.text_area("제외할 단어 (쉼표 구분)", "멤버,그룹,노래,곡,팬덤")
 
 # 분석 실행 버튼
-run_analysis = st.sidebar.button("🚀 분석 실행", type="primary")
+run_analysis = st.sidebar.button("분석 실행", type="primary")
 
-# ==================== 분석 실행 ====================
+#분석 실행
 if run_analysis:
     if not client_id or not client_secret:
-        st.error("⚠️ 네이버 API 키를 입력해주세요!")
+        st.error("네이버 API 키를 입력해주세요")
     else:
-        with st.spinner("데이터 수집 및 분석 중..."):
+        with st.spinner("데이터 수집 및 분석 중"):
             # 불용어 설정
             custom_stopwords = set([s.strip() for s in stopwords_input.split(',')])
             okt = Okt()
@@ -152,16 +151,15 @@ if run_analysis:
                 }
             
             st.session_state['factor_data'] = factor_data
-            st.success("✅ 분석 완료!")
+            st.success("분석 완료")
 
-# ==================== 시각화 ====================
-if 'factor_data' in st.session_state and st.session_state['factor_data']:
+# 시각화
+    session_state and st.session_state['factor_data']
     factor_data = st.session_state['factor_data']
     
-    st.markdown("---")
     
     # 1. Plotly - 요인별 기사 수 비교
-    st.header("1️⃣ 요인별 뉴스 기사 수 비교 (Plotly)")
+    st.header("요인별 뉴스 기사 수 비교 (Plotly)")
     factor_counts = {k: len(v['df']) for k, v in factor_data.items()}
     df_counts = pd.DataFrame(factor_counts.items(), columns=['요인', '기사 수'])
     
@@ -177,10 +175,9 @@ if 'factor_data' in st.session_state and st.session_state['factor_data']:
     fig_plotly.update_traces(textposition='outside')
     st.plotly_chart(fig_plotly, use_container_width=True)
     
-    st.markdown("---")
     
     # 2. WordCloud - 요인별 핵심 키워드
-    st.header("2️⃣ 요인별 핵심 키워드 워드클라우드")
+    st.header("요인별 핵심 키워드 워드클라우드")
     
     cols = st.columns(len(factor_data))
     for i, (factor, data) in enumerate(factor_data.items()):
@@ -206,10 +203,10 @@ if 'factor_data' in st.session_state and st.session_state['factor_data']:
             else:
                 st.info("키워드 데이터 부족")
     
-    st.markdown("---")
+
     
     # 3. Seaborn - 상위 키워드 빈도 분석
-    st.header("3️⃣ 전체 상위 키워드 빈도 분석 (Seaborn)")
+    st.header("전체 상위 키워드 빈도 분석")
     
     all_keywords = Counter()
     for factor_info in factor_data.values():
@@ -226,10 +223,9 @@ if 'factor_data' in st.session_state and st.session_state['factor_data']:
     st.pyplot(fig_sns)
     plt.close()
     
-    st.markdown("---")
     
     # 4. Altair - 키워드 분포 스캐터 플롯
-    st.header("4️⃣ 키워드 빈도 vs 중요도 분석 (Altair)")
+    st.header("키워드 빈도 vs 중요도 분석")
     
     df_scatter = pd.DataFrame(all_keywords.most_common(50), columns=['키워드', '빈도'])
     df_scatter['중요도'] = df_scatter['빈도'].rank(method='max')
@@ -249,10 +245,9 @@ if 'factor_data' in st.session_state and st.session_state['factor_data']:
     
     st.altair_chart(chart, use_container_width=True)
     
-    st.markdown("---")
     
-    # 5. NetworkX - 키워드 관계망 (외국인 요인)
-    st.header("5️⃣ 키워드 관계 네트워크 (외국인 요인)")
+    # 5. NetworkX - 키워드 관계망
+    st.header("키워드 관계 네트워크")
     
     if '외국인' in factor_data:
         G = factor_data['외국인']['graph']
@@ -285,31 +280,16 @@ if 'factor_data' in st.session_state and st.session_state['factor_data']:
     else:
         st.warning("외국인 요인 데이터가 없습니다.")
     
-    st.markdown("---")
     
     # 분석 결과 요약
-    st.header("📌 분석 결과 요약")
+    st.header("분석 결과 요약")
     st.markdown(f"""
-    - **분석된 요인 수**: {len(factor_data)}개
-    - **총 수집 기사 수**: {sum(len(v['df']) for v in factor_data.values())}건
-    - **전체 고유 키워드 수**: {len(all_keywords)}개
-    - **네트워크 노드 수**: {G.number_of_nodes() if '외국인' in factor_data else 0}개
+    - 분석된 요인 수: {len(factor_data)}개
+    - 총 수집 기사 수: {sum(len(v['df']) for v in factor_data.values())}건
+    - 전체 고유 키워드 수: {len(all_keywords)}개
+    - 네트워크 노드 수: {G.number_of_nodes() if '외국인' in factor_data else 0}개
     """)
 
 else:
-    st.info("👈 좌측 사이드바에서 설정을 완료하고 '분석 실행' 버튼을 눌러주세요.")
+    st.info("분석 실행 버튼을 눌러주세요.")
     
-    st.markdown("""
-    ### 📖 사용 방법
-    1. **네이버 API 키 입력**: [네이버 개발자센터](https://developers.naver.com/)에서 발급받은 키를 입력하세요
-    2. **검색어 설정**: 분석하고 싶은 주제의 키워드를 입력하세요
-    3. **요인별 키워드**: 5가지 요인에 대한 추가 검색어를 설정하세요
-    4. **분석 실행**: 버튼을 클릭하여 데이터 수집 및 시각화를 시작하세요
-    
-    ### 📊 제공되는 시각화
-    - **Plotly**: 인터랙티브 막대 그래프
-    - **WordCloud**: 키워드 워드클라우드
-    - **Seaborn**: 상위 키워드 빈도 차트
-    - **Altair**: 키워드 분포 스캐터 플롯
-    - **NetworkX**: 키워드 관계 네트워크
-    """)
