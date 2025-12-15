@@ -56,7 +56,7 @@ import data
 import data_
 import data_2
 import viz
-import visualizaion
+import visualization
 
 CLIENT_ID = 'Hl5maeWyGFS0SOj9hJQt'
 CLIENT_SECRET = 'sYYE75Wqpv'
