@@ -1,4 +1,5 @@
 import streamlit as st
+import urllib.parse
 
 #데이터 수집
 @st.cache_data(ttl=3600)
