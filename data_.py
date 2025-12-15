@@ -2,8 +2,10 @@ import streamlit as st
 
 #데이터 수집
 @st.cache_data(ttl=3600)
-def fetch_naver_data(query, num_data=100, client_id=CLIENT_ID, client_secret=CLIENT_SECRET):
-    """지정된 쿼리로 네이버 뉴스 데이터를 수집합니다."""
+# data_.py
+def fetch_naver_data(query, num_data=100, client_id=None, client_secret=None):
+    if not client_id or not client_secret:
+        raise ValueError("Client ID and Secret must be provided.")
     encText = urllib.parse.quote(query)
     results = []
     display_count = min(100, num_data)
