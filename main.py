@@ -57,3 +57,9 @@ import data_
 import data_2
 import viz
 import visualizaion
+
+CLIENT_ID = 'Hl5maeWyGFS0SOj9hJQt'
+CLIENT_SECRET = 'sYYE75Wqpv'
+
+
+data_.fetch_naver_data("팬덤", client_id=CLIENT_ID, client_secret=CLIENT_SECRET)
