@@ -7,6 +7,8 @@ import altair as alt
 from collections import Counter
 from wordcloud import WordCloud, STOPWORDS
 import networkx as nx
+import seaborn as sns
+
 
 
 # 페이지 기본 설정
