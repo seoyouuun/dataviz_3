@@ -4,3 +4,4 @@ streamlit
 seaborn
 altair
 wordcloud
+networkx
